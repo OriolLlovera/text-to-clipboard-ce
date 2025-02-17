@@ -44,9 +44,15 @@ document.addEventListener("DOMContentLoaded", () => {
   // Cargar textos manteniendo el índice original
   const loadTexts = () => {
     chrome.storage.local.get({ copiedItems: [] }, ({ copiedItems }) => {
-      originalItems = [...copiedItems];
-      const itemsWithIndex = copiedItems
-        .map((item, index) => ({ ...item, originalIndex: index }))
+      // Validación extra del array
+      const validItems = Array.isArray(copiedItems) ? copiedItems : [];
+      originalItems = validItems;
+      const itemsWithIndex = validItems
+        .map((item, index) => ({ 
+          ...item,
+          timestamp: item.timestamp || new Date().toISOString(), // Fecha por defecto
+          originalIndex: index 
+        }))
         .reverse();
       renderList(itemsWithIndex);
     });
@@ -162,30 +168,56 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("importBtn").addEventListener("change", async (e) => {
     const file = e.target.files[0];
     if (!file) return;
-
+  
     try {
       const text = await file.text();
       let importedItems = [];
-
+  
       if (file.name.endsWith(".json")) {
         importedItems = JSON.parse(text);
       } else if (file.name.endsWith(".txt")) {
-        importedItems = text
-          .split("\n" + "-".repeat(50))
+        importedItems = text.split("\n" + "-".repeat(50))
           .map((block) => {
+            // Extraer componentes con mejor expresión regular
             const text = block.match(/Texto: (.*?)(\n|$)/)?.[1]?.trim() || "";
             const url = block.match(/URL: (.*?)(\n|$)/)?.[1]?.trim() || "";
-            const timestamp =
-              block.match(/Fecha: (.*?)(\n|$)/)?.[1]?.trim() || new Date().toISOString();
-            return { text, url, timestamp };
+            const fechaHora = block.match(/Fecha: (.*?)(\n|$)/)?.[1]?.trim();
+            
+            // Convertir fecha original al formato ISO
+            let timestamp;
+            if (fechaHora) {
+              // Parsear formato español: DD/MM/AAAA HH:MM
+              const [fecha, hora] = fechaHora.split(' ');
+              const [dia, mes, anio] = fecha.split('/');
+              const [horas, minutos] = hora.split(':');
+              
+              timestamp = new Date(
+                parseInt(anio),
+                parseInt(mes) - 1, // Meses son 0-based en JS
+                parseInt(dia),
+                parseInt(horas),
+                parseInt(minutos)
+              ).toISOString();
+            } else {
+              timestamp = new Date().toISOString(); // Si no hay fecha, usar actual
+            }
+  
+            return { 
+              text, 
+              url: url || "unknown",
+              timestamp 
+            };
           })
-          .filter((item) => item.text);
+          .filter(item => item.text);
       }
-
+  
       if (Array.isArray(importedItems)) {
-        await chrome.storage.local.set({ copiedItems: importedItems });
+        const { copiedItems = [] } = await chrome.storage.local.get("copiedItems");
+        const combinedItems = [...copiedItems, ...importedItems];
+        
+        await chrome.storage.local.set({ copiedItems: combinedItems });
         loadTexts();
-        alert(`Importado: ${importedItems.length} elementos`);
+        alert(`Importados ${importedItems.length} elementos con sus fechas originales`);
       }
     } catch (error) {
       alert(`Error: ${error.message}`);
@@ -195,10 +227,14 @@ document.addEventListener("DOMContentLoaded", () => {
   // Borrar todo
   clearAllBtn.addEventListener("click", () => {
     if (confirm("¿Borrar todo el historial?")) {
-      chrome.storage.local.set({ copiedItems: [] }, loadTexts);
+      chrome.storage.local.set({ copiedItems: [] }, () => {
+        // Forzar reinicio del array
+        originalItems = [];
+        loadTexts();
+        alert("Historial borrado. Puedes comenzar de nuevo.");
+      });
     }
   });
-
   // Inicializar
   loadTexts();
 });

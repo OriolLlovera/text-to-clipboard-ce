@@ -23,4 +23,21 @@ document.addEventListener("copy", () => {
         }
       });
   }, 100);
+
+  // En content.js, verificar inicialización del storage
+chrome.runtime.onMessage.addListener((message) => {
+  if (message.action === "saveText") {
+    chrome.storage.local.get({ copiedItems: [] }, ({ copiedItems }) => {
+      // Asegurar que siempre sea un array
+      const items = Array.isArray(copiedItems) ? copiedItems : [];
+      const newItem = {
+        text: message.text,
+        url: message.url,
+        timestamp: new Date().toISOString()
+      };
+      chrome.storage.local.set({ copiedItems: [...items, newItem] });
+    });
+  }
+});
+
 });
