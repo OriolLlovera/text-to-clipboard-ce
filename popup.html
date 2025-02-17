@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Clipboard Manager</title>
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+<body>
+  <h2>SaveMyText</h2>
+  <input type="text" id="search" placeholder="Buscar texto...">
+  <div id="textList"></div>
+  
+  <div id="exportButtons">
+    <button class="export-btn" data-format="json" aria-label="Exportar JSON">
+      <span class="material-icons">download</span>
+    </button>
+    <button class="export-btn" data-format="txt" aria-label="Exportar TXT">
+      <span class="material-icons">description</span>
+    </button>
+    <label for="importBtn" class="import-btn" aria-label="Importar">
+      <span class="material-icons">upload</span>
+    </label>
+    <input type="file" id="importBtn" accept=".json,.txt" hidden>
+    <button id="clearAll" aria-label="Borrar todo">
+      <span class="material-icons">delete</span>
+    </button>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

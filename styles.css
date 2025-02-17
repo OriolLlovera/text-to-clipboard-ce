@@ -1,0 +1,395 @@
+/* styles.css */
+/* ========== GENERAL ========== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+}
+
+body {
+  width: 450px;
+  height: 500px;
+  background: #0f172a;
+  color: #f8fafc;
+  padding: 15px 15px 8px 15px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* ========== TÍTULO ANIMADO ========== */
+h2 {
+  position: relative;
+  font-size: 1.4rem;
+  text-align: center;
+  margin: 0 0 25px 0;
+  padding: 15px 0;
+  color: #e0e0e0;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-weight: 600;
+  background: linear-gradient(
+    90deg,
+    #818cf8 0%,
+    #6366f1 25%,
+    #a855f7 50%,
+    #6366f1 75%,
+    #818cf8 100%
+  );
+  background-size: 200% auto;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: title-glow 6s linear infinite;
+}
+
+@keyframes title-glow {
+  0% {
+    background-position: 0% center;
+    text-shadow: 0 0 10px rgba(129, 140, 248, 0.2);
+  }
+  50% {
+    background-position: 100% center;
+    text-shadow: 0 0 20px rgba(129, 140, 248, 0.4);
+  }
+  100% {
+    background-position: 0% center;
+    text-shadow: 0 0 10px rgba(129, 140, 248, 0.2);
+  }
+}
+
+h2::after {
+  content: "";
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #818cf8, transparent);
+  opacity: 0.6;
+}
+
+/* ========== SEARCH BAR ========== */
+#search {
+  width: 100%;
+  padding: 10px 15px;
+  margin-bottom: 15px;
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 8px;
+  color: #f8fafc;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+#search:focus {
+  outline: none;
+  border-color: #818cf8;
+  box-shadow: 0 0 0 2px rgba(129, 140, 248, 0.1);
+}
+
+/* ========== TEXT LIST CONTAINER ========== */
+#textList {
+  flex: 1;
+  overflow-y: auto;
+  margin-bottom: 5px;
+  min-height: 370px;
+  padding-right: 5px;
+}
+
+/* ========== TEXT ITEMS ========== */
+.text-item {
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 8px;
+  padding: 12px;
+  margin: 8px 0;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.text-content {
+  flex: 1;
+  word-break: break-word;
+  font-size: 14px;
+  line-height: 1.5;
+  padding-right: 10px;
+}
+
+/* ========== BOTONES EDITAR/ELIMINAR ========== */
+.btn-group {
+  display: flex;
+  gap: 6px;
+  margin-top: 5px;
+}
+
+.btn-group button {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #334155;
+  border: 1px solid #475569;
+}
+
+.btn-group .edit-btn:hover {
+  background: #3b82f6;
+  border-color: #2563eb;
+}
+
+.btn-group .delete-btn:hover {
+  background: #ef4444;
+  border-color: #dc2626;
+}
+
+.btn-group .material-icons {
+  font-size: 18px;
+  color: #94a3b8;
+  transition: color 0.2s ease;
+}
+
+.btn-group button:hover .material-icons {
+  color: #fff;
+}
+
+/* ========== BARRA DE CONTROLES INFERIOR ========== */
+#exportButtons {
+  display: flex;
+  gap: 8px;
+  padding: 12px 0 8px 0;
+  border-top: 1px solid #334155;
+  margin-bottom: 12px;
+}
+
+#exportButtons > * {
+  flex: 1;
+  height: 36px;
+  background: #334155;
+  border: 1px solid #475569;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#exportButtons > *:hover {
+  background: #4f46e5;
+  border-color: #6366f1;
+}
+
+#exportButtons .material-icons {
+  font-size: 20px;
+  color: #94a3b8;
+  transition: color 0.2s ease;
+}
+
+#exportButtons > *:hover .material-icons {
+  color: #fff;
+}
+
+/* ========== BOTÓN IMPORTAR ========== */
+.import-btn {
+  position: relative;
+}
+
+.import-btn::after {
+  content: attr(aria-label);
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1e293b;
+  color: #f8fafc;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 12px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  border: 1px solid #334155;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.import-btn:hover::after {
+  opacity: 1;
+}
+
+/* ========== SCROLLBAR ========== */
+#textList::-webkit-scrollbar {
+  width: 8px;
+}
+
+#textList::-webkit-scrollbar-track {
+  background: #1e293b;
+}
+
+#textList::-webkit-scrollbar-thumb {
+  background: #4f46e5;
+  border-radius: 4px;
+}
+
+/* ========== MODO EDICIÓN ========== */
+.text-item textarea {
+  width: 100%;
+  min-height: 100px;
+  padding: 10px;
+  background: #0f172a;
+  border: 1px solid #4f46e5;
+  color: #f8fafc;
+  border-radius: 6px;
+  resize: vertical;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* ========== TOOLTIPS ========== */
+button {
+  position: relative;
+}
+
+button::after {
+  content: attr(aria-label);
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1e293b;
+  color: #f8fafc;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 12px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  border: 1px solid #334155;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+button:hover::after {
+  opacity: 1;
+}
+
+/* ========== BOTÓN IMPORTAR ========== */
+#importBtn {
+  display: none !important; /* Asegurar que el input está oculto */
+}
+
+.import-label {
+  flex: 1;
+  height: 36px;
+  background: #334155;
+  border: 1px solid #475569;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.import-label:hover {
+  background: #4f46e5;
+  border-color: #6366f1;
+}
+
+.import-label .material-icons {
+  font-size: 20px;
+  color: #94a3b8;
+  transition: color 0.2s ease;
+}
+
+.import-label:hover .material-icons {
+  color: #fff;
+}
+
+.text-item .url {
+  color: #64748b;
+  font-size: 12px;
+  margin-top: 6px;
+  word-break: break-all;
+}
+
+.text-item .url::before {
+  content: "📌 ";
+  font-size: 10px;
+}
+
+/* ========== METADATOS ========== */
+.text-item .meta {
+  display: flex;
+  gap: 15px;
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px solid #33415555;
+  color: #94a3b8;
+  font-size: 0.82em;
+  align-items: baseline;
+}
+
+.text-item .meta > span {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  line-height: 1;
+}
+
+.text-item .url::before {
+  content: "🌐";
+  font-size: 12px;
+  opacity: 0.8;
+  position: relative;
+  top: 1px;
+}
+
+.text-item .date::before {
+  content: "📅";
+  font-size: 12px;
+  opacity: 0.8;
+  position: relative;
+  top: 1px;
+}
+
+.text-item .time::before {
+  content: "🕒";
+  font-size: 12px;
+  opacity: 0.8;
+  position: relative;
+  top: 1px;
+}
+
+/* Ajuste específico para la URL */
+.text-item .url {
+  font-family: monospace;
+  font-size: 0.9em;
+  letter-spacing: -0.5px;
+}
+
+/* Ajuste del texto principal */
+.text-item .text {
+  line-height: 1.6;
+  margin-bottom: 4px;
+  padding-right: 15px;
+}
+
+/* Espaciado general mejorado */
+.text-item {
+  padding: 14px;
+  margin: 10px 0;
+}
+
+/* Separación entre elementos */
+.text-item + .text-item {
+  margin-top: 12px;
+}
