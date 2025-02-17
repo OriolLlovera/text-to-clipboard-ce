@@ -1,6 +1,6 @@
 # Text to Clipboard
 
-![icon]![logo](https://github.com/user-attachments/assets/95b7d8c3-2a7d-4d50-be4e-cb14dfb00158)
+![logo](https://github.com/user-attachments/assets/95b7d8c3-2a7d-4d50-be4e-cb14dfb00158)
 
 
 
